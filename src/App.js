@@ -8,11 +8,43 @@ function App() {
   const [dogImages, setDogImages] = useState([]);
 
   useEffect(() => {
-    // TODO
+    const url = "https://dog.ceo/api/breeds/list/all"
+    const fetchDataDog = async () => {
+      try {
+        const response = await fetch(url)
+
+        if (!response.ok) {
+          throw new Error('Não foi possível carregar os dados da API.');
+        }
+        let data = await response.json();
+        data = Object.keys(data.message)
+        setBreeds(data)
+
+      } catch (error) {
+        console.log("Error fetching data:")
+      }
+    }
+    fetchDataDog()
   }, []);
 
   const searchByBreed = () => {
-    // TODO
+    setIsLoading(true);
+
+    async function resultSearchDog() {
+      try {
+        const url = `https://dog.ceo/api/breed/${selectedBreed}/images`
+        const data = await fetch(url)
+        let response = await data.json();
+        //response = Object.keys(response.message)
+        setIsLoading(false);
+        setDogImages(response.message)
+
+      } catch (error) {
+        console.log("Error fetching data", error)
+      }
+
+    }
+    resultSearchDog()
   };
 
   return (
@@ -42,7 +74,7 @@ function App() {
             className="btn btn-primary mx-2"
             disabled={!selectedBreed}
             onClick={searchByBreed}
-            style={{color: "#fff", cursor: "pointer"}}
+            style={{ color: "#fff", cursor: "pointer" }}
           >
             Search
           </button>
