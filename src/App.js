@@ -17,10 +17,9 @@ function App() {
           throw new Error('Não foi possível carregar os dados da API.');
         }
         let data = await response.json();
-        console.log(response);
         data = Object.keys(data.message)
-
         setBreeds(data)
+
       } catch (error) {
         console.log("Error fetching data:")
       }
@@ -29,7 +28,23 @@ function App() {
   }, []);
 
   const searchByBreed = () => {
-    // TODO
+    setIsLoading(true);
+
+    async function resultSearchDog() {
+      try {
+        const url = `https://dog.ceo/api/breed/${selectedBreed}/images`
+        const data = await fetch(url)
+        let response = await data.json();
+        //response = Object.keys(response.message)
+        setIsLoading(false);
+        setDogImages(response.message)
+
+      } catch (error) {
+        console.log("Error fetching data", error)
+      }
+
+    }
+    resultSearchDog()
   };
 
   return (
