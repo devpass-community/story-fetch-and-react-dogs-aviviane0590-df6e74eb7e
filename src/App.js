@@ -8,7 +8,24 @@ function App() {
   const [dogImages, setDogImages] = useState([]);
 
   useEffect(() => {
-    // TODO
+    const url = "https://dog.ceo/api/breeds/list/all"
+    const fetchDataDog = async () => {
+      try {
+        const response = await fetch(url)
+
+        if (!response.ok) {
+          throw new Error('Não foi possível carregar os dados da API.');
+        }
+        let data = await response.json();
+        console.log(response);
+        data = Object.keys(data.message)
+
+        setBreeds(data)
+      } catch (error) {
+        console.log("Error fetching data:")
+      }
+    }
+    fetchDataDog()
   }, []);
 
   const searchByBreed = () => {
@@ -42,7 +59,7 @@ function App() {
             className="btn btn-primary mx-2"
             disabled={!selectedBreed}
             onClick={searchByBreed}
-            style={{color: "#fff", cursor: "pointer"}}
+            style={{ color: "#fff", cursor: "pointer" }}
           >
             Search
           </button>
